@@ -134,3 +134,11 @@
 	</body>
 
 </html>
+
+
+If your WordPress host supports git, check to see if it helps in your development process. One of the hosting providers, Pantheon, for example, makes it easy to visualise and understand version control by integrating the git process within its dashboard. Check out their guide here.
+
+Also, check out this interactive tryGit exercise from CodeSchool that walks you through the basics steps of learning Git and pushing to remote repositories like GitHub within 15 minutes. You can also use the exercise to refresh your learning of Git.
+
+Let me know if you have any questions or suggestions about Git and Github in the comments below.
+
