@@ -1,0 +1,167 @@
+(1)Display name of employees which have only two a’s
+ans--SELECT * FROM `employee` WHERE empname like '_a%';
+
+(2)Display name of products which are not sold by employee Peter
+
+ans-- SELECT * FROM `product` WHERE `productid` not in(
+    SELECT od.productid 
+    	FROM `order_detail` od
+    	left join ordermaster om on(om.orderid=od.orderid)
+    where empid='Peter') 
+	
+(3)Display name of products which are not purchased by customer Smith.
+ans--SELECT * FROM `product` WHERE `productid` not in(
+    SELECT od.productid 
+    	FROM `order_detail` od
+    	left join ordermaster om on(om.orderid=od.orderid)
+    where customerid='c0004')
+	
+	
+(4)Display name of products which are purchased individually.
+ans--select productname from product where productid in(select productid from order_detail where orderid in (select orderid from ordermaster where customerid in(select customerid from ordermaster)))
+	
+
+(5)Display name of products which are sold by employees whose manager is Michael
+
+ans--SELECT productname FROM `product` WHERE `productid` in(SELECT productid FROM `order_detail` where `orderid` in(select orderid from ordermaster where empid in(select empid from employee where emp_manager_id='E0006' )))
+
+
+
+(7)Display name of employees in ascending order according to last two characters of each
+name
+ans-- SELECT *
+FROM employee
+ORDER BY RIGHT(empname, 3) ASC;
+
+
+(8)Display name and department information for all employees in departments 10 and 20 along with department information for departments 30 and 40. 
+ans--select employee.empname,department.deptid,department.depname
+from employee
+right join department on employee.deptid=department.deptid
+ where (department.deptid BETWEEN 10 AND 20)
+ or
+ (department.deptid BETWEEN 30 AND 40);
+ 
+
+(10)Display rank the salaries in table employee while allowing for ties The output will be as such:
+Rank  Salary 
+1  8000 
+2  9000 
+3  12000 
+3  12000 
+ 
+ ans--select id as rank,empsalary from employee
+order by empsalary asc;
+
+
+(11)Display name of first employee, third employee, and so forth.
+ans-- select t.*
+from (select t.*, (@rn := @rn + 1) as seqnum
+      from employee t cross join
+           (select @rn := 0) vars
+      order by emp_id
+     ) t
+where mod(seqnum, 2) = 0;
+
+
+
+select empname from employee
+where MOD(empno, 2)<>0;
+
+
+(12)Display names and salaries of the employees with the top five salaries.
+ans--SELECT empname,empsalary
+FROM employee
+ORDER BY empsalary DESC
+LIMIT 5
+
+
+(13)Display name of products which are not purchased by any customer from last 4 months.
+ans-- 
+SELECT productname FROM `product` WHERE `productid` not in(
+    SELECT od.productid 
+    	FROM `order_detail` od
+    	left join ordermaster om on(om.orderid=od.orderid)
+    where om.orderdate >= last_day(now()) + interval 1 day - interval 4 month )
+    
+  
+(14)Display name of products which are purchased in all 12 months.
+ans--SELECT productname
+from product where productid in (select productid from order_detail where orderid in (select orderid from ordermaster where customerid in (select customerid from customer 
+WHERE orderdate <= NOW() and orderdate >= Date_add(Now(),interval - 12 month)
+)));
+
+
+(15)Display the name of customers who are never attended by employee “Peter”		
+ans--select customername from customer where customerid not in(
+    select customerid from ordermaster where empid='E0003')
+	
+
+(16)Display the name of customer who has purchased “Pepsi” but not “Lime Water”
+ans--select customername from customer where customerid in(select customerid from ordermaster where orderid in (select orderid from order_detail where productid in ('P0001') and productid not in ('p0012')));
+
+
+(17)Display the name of customer who is attended by “Peter” & “Bob”.
+ans--select customername from customer where customerid in(select customerid from ordermaster where empid in(select empid from employee where empid in('E0001','E0003')));
+
+
+(18)Display the total billing done by employee “Peter”//aayush.
+ans-- select sum(productrate) from product where productid in(
+    select productid from order_detail where orderid in(
+        select orderid from ordermaster where empid in('E0003')))
+
+
+(19)Display name of employees who has attended customer “Thompson”.
+ans--select empname from employee where empid in(select empid from ordermaster where customerid in(select customerid from customer where customerid in('C0002')));
+
+
+(20)Display the order ids of the order which are placed by “Thompson” but not attended by “Kevin”.
+ans-- select orderid from ordermaster where customerid in('C0002') and empid not IN('E0004');
+
+
+
+(21)Display name of customers giving maximum number of orders.
+ans--SELECT customername FROM customer WHERE customerid in(
+    SELECT om.customerid 
+    	FROM ordermaster om
+    	left join order_detail od on(om.orderid=od.orderid)
+    HAVING COUNT(om.orderid)
+    order by MAX(om.orderid))
+    group by customername
+	
+	
+	
+(22)Display name of customers who purchased maximum number of products	
+ans-- select customername from customer where customerid in(select om.customerid from ordermaster om
+	left join order_detail od on(om.orderid=od.orderid)
+  having sum(od.quantity) 
+order by MAX(od.quantity))	
+
+
+
+(23)Display name of customers who purchased maximum number of different products 
+ans-- select customername from customer where customerid IN(
+    select customerid from ordermaster where orderid in(
+        select orderid from order_detail WHERE productid in(
+            select productid from product
+            order by COUNT(productid)
+            )
+    group by (customername)))
+	
+	
+	
+(24)Display name of customers who are not purchased any product from last three months.
+ans--SELECT * FROM `product` WHERE `productid` not in(
+    SELECT od.productid 
+    	FROM `order_detail` od
+    	left join ordermaster om on(om.orderid=od.orderid)
+    where om.orderdate >= last_day(now()) + interval 1 day - interval 3 month )
+	
+	
+(25)Display name of customers who purchased every month.
+ans-- select customername from customer where customerid in(
+        select customerid from ordermaster where MONTH(orderdate) = MONTH(CURDATE()));
+		
+(26)Display a list of all Fridays for the current year.
+ans-- SELECT * FROM `ordermaster` WHERE DAYNAME(orderdate)='Friday' and year(`orderdate`) = year(now())
+		

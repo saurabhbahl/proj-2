@@ -1,0 +1,167 @@
+Q-1 Get job history of employee in alphabetic order by name
+
+ans-- select empp.emp_id,empp.firstname,jobhistory.start_date,jobhistory.end_date,jobhistory.job_id,jobhistory.dept_id from empp
+left join jobhistory on empp.emp_id=jobhistory.emp_id
+ORDER by empp.firstname ASC
+
+Q-2 Get all employee who are under the manager Id 1234 and with there respective salary.
+
+ans-- select firstname,salary from empp
+where manager_id='1005';
+
+Q-3 Get All employees with there respective departments and job id with salary those are non residents of India in Hr database
+
+ans-- 
+select empp.firstname,empp.salary,empp.job_id,empp.dept_id,countryy.country_name
+from empp,
+	countryy,
+    dept,
+    locatonn
+    where empp.dept_id=dept.dept_id
+    AND dept.location_id=locatonn.location_id
+    AND locatonn.country_id=countryy.country_id
+    AND countryy.country_name not in('India');
+
+Q-4 Get employee of the month listed with there department as well as these employee are one from each departments have highest salary
+
+ans-- select empp.firstname,max(empp.salary),dept.dept_name,jobgrades.grade_level
+from empp,
+dept,
+jobgrades
+where jobgrades.grade_level='A';
+
+
+
+ select empp.firstname,max(empp.salary),dept.dept_name
+from empp
+left join dept on empp.dept_id=dept.dept_id;
+
+SELECT d.dept_name,MAX(e.salary),e.firstname FROM dept d 
+LEFT OUTER JOIN empp e ON (e.dept_id = d.dept_id)
+GROUP BY d.dept_id;
+
+select e.firstname,max(e.salary),d.dept_name,g.grade_level
+from empp e, dept d, jobgrades g 
+WHERE e.salary BETWEEN g.lowest_sal AND g.highest_sal
+GROUP BY g.grade_level;
+
+Q-5 List grade of all employees with there region and location and listed with there departments.
+
+ans--  SELECT 
+ empp.firstname,
+ empp.salary,
+  dept.dept_name,
+ jobgrades.grade_level,
+ regionss.region_name,
+ locatonn.street_address,
+ countryy.country_id
+FROM
+ empp,
+  dept,
+  jobgrades,
+  regionss,
+  countryy,
+  locatonn
+  
+WHERE empp.dept_id = dept.dept_id
+AND dept.location_id = locatonn.location_id
+AND locatonn.country_id=countryy.country_id
+AND countryy.region_id=regionss.region_id
+AND empp.salary BETWEEN jobgrades.lowest_sal AND jobgrades.highest_sal
+group by empp.firstname
+
+
+
+
+select e.firstname,e.salary,g.grade_level
+from empp e, jobgrades g 
+where e.salary BETWEEN g.lowest_sal and g.highest_sal;   
+
+Q-6 Write a query to display distinct Employee and their cities
+
+ans-- SELECT
+ empp.firstname,
+ locatonn.city
+FROM
+ empp,
+  dept,
+  locatonn
+WHERE empp.dept_id = dept.dept_id
+AND dept.location_id = locatonn.location_id
+group by empp.firstname
+
+
+Q-7 display employee whos salary less than 20000
+
+ans-- SELECT empp.firstname,empp.lastname,empp.salary,dept.dept_name,jobss.job_title
+from empp,
+dept,
+jobss
+where empp.dept_id=dept.dept_id
+AND empp.job_id=jobss.job_id
+AND empp.salary < 20000;
+
+
+Q-8 Display name of employees which have only 'ar'.
+
+ans-- SELECT firstname from empp
+where firstname like '%ar%';
+
+Q-9 Display employee whos department is finance and grade is B.
+
+ans-- select empp.firstname,dept.dept_name,jobgrades.grade_level
+from empp,
+jobgrades,
+dept
+where empp.dept_id=dept.dept_id
+AND empp.salary BETWEEN (select jobgrades.highest_sal from jobgrades where jobgrades.grade_level='B') AND (select jobgrades.lowest_sal from jobgrades where jobgrades.grade_level='B');
+
+
+Q-10 Display employee whos salary between 8000 to 15000 and commission is null,department is hr and finance and hiredate is after 2005. (1-1-2005)
+
+ans-- select empp.firstname,dept.dept_name,empp.salary,empp.hiredate
+from empp
+left join dept on empp.dept_id=dept.dept_id
+where empp.salary BETWEEN 8000 and 15000 
+and empp.commission_pct is null
+and hiredate BETWEEN '2005-01-01' and now()
+and dept.dept_name in ('hr' ,'finance');
+ 
+SELECT *
+ FROM empp
+  WHERE salary BETWEEN 8000 AND 15000 
+      AND commission_pct IS NULL
+       AND  dept_id  IN (308 , 301)
+          AND   hiredate > '2005-01-01'
+
+
+
+Q-11 Write a query to display distinct employees and their departments with location
+
+ans-- SELECT
+ empp.firstname,
+ dept.dept_name,
+ locatonn.street_address
+FROM
+ empp,
+  dept,
+  locatonn
+WHERE empp.dept_id = dept.dept_id
+AND dept.location_id = locatonn.location_id
+group by empp.firstname;
+
+
+Q-12 Write a query to display the employee name ( first name and last name ), employee id and salary of all employees who report to manager name end with letter T
+
+ans-- select empp.emp_id,empp.firstname,empp.lastname,empp.salary,dept.manager_name
+from empp
+left join dept on empp.dept_id=dept.dept_id
+where dept.manager_name like '%t';
+
+Q-13 Display all the information of an employee whose id is any of the number 1, 123 and 4.
+
+ans-- select * from empp
+where emp_id in (123,10003,10004);
+
+select * from empp
+where emp_id in (123,1,4);

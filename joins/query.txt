@@ -1,0 +1,42 @@
+//Display name of products which are not sold by employee Peter	.
+//Display name of products which are not purchased by customer Smith.
+//Display name of products which are purchased individually.
+This message has been removed.
+//Display name of products which are sold by employees whose manager is Michael.
+//Display name of products which are not purchased by any customer from last 4 months.
+->>// Display name of products which are purchased in all 12 months.
+//Display name of employees which have only two a’s
+//Display name of employees in ascending order according to last two characters of each
+name
+//Display name of employees who have grade B and having manager belongs to Admin
+department.
+      //Display name of customers giving maximum number of orders.
+//4) Display name and department information for all employees in departments 10 and 20 along with department information for departments 30 and 40. 
+//5) Display names and salaries of the employees with the top five salaries. 
+//3) Display name of first employee, third employee, and so forth.
+//6) Display rank the salaries in table employee while allowing for ties The output will be as such:
+Rank  Salary 
+1  8000 
+2  9000 
+3  12000 
+3  12000 
+
+9) Display employee's name, his department, the number of employees in his department (himself included), and the total number of employees. 
+10) Display a list of all Fridays for the current year.
+
+//2) Display the name of customers who are never attended by employee “Peter”. 
+//3) Display the total billing done by employee “Peter”. 
+//4) Display the name of customer who has purchased “Pepsi” but not “Lime Water”. 
+5) Display the name of employee who generated maximum revenue for month of January. 
+6)// Display the name of customer who is attended by “Peter” & “Bob”. 
+7) Display the name of employee who has generated maximum revenue for today. 
+//8) Display name of employees who has attended customer “Thompson”. 
+9)// Display the order ids of the order which are placed by “Thompson” but not attended by “Kevin”. 
+10) Display the name of manager whose team has generated maximum revenue for current financial year. 
+
+This message has been removed.
+1)// Display name of customers giving maximum number of orders.
+2) //Display name of customers who purchased maximum number of products 
+3) //Display name of customers who purchased maximum number of different products 
+4) //Display name of customers who are not purchased any product from last three months. 
+5) //Display name of customers who purchased every month.

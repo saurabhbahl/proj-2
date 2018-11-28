@@ -1,0 +1,177 @@
+/(1)Display name of employees which have only two a’s
+ans--SELECT * FROM `employee` WHERE empname like '_a%';
+
+SELECT * FROM `employee` WHERE empname like '%aa%';
+
+/(2)Display name of products which are not sold by employee Peter//aayush
+ans--SELECT product.productname
+from employee
+right join product on employee.empid=product.empid
+where NOT employee.empname="aayush";
+
+/(3)Display name of products which are not purchased by customer Smith.
+ans-- SELECT product.productname
+from customer
+right join product on customer.productid=product.productid
+where NOT customer.customername="vikisha";
+
+/(4)Display name of products which are purchased individually.
+ans-- SELECT customer.customername,product.productname
+from customer
+right join product on customer.productid=product.productid
+;
+
+/(5)Display name of products which are sold by employees whose manager is Michael//sushant.
+ans-- select employee.empname,product.productname,manager.managername
+from employee
+left join product on employee.empid=product.empid
+left join manager on employee.empid=manager.empid
+where manager.managername="sushant";
+
+(6)Display name of employees who have grade B and having manager belongs to Admin
+department.
+ans--  select employee.empname,department.depname,salarygrade.grade
+from employee 
+left join department on employee.empid=department.empid
+left join salarygrade on employee.empid=salarygrade.empid
+where department.depname="hr" AND salarygrade.grade="b";
+
+/(7)Display name of employees in ascending order according to last two characters of each
+name
+ans-- SELECT *
+FROM employee
+ORDER BY RIGHT(empname, 3) ASC;
+
+
+/(8)Display name and department information for all employees in departments 10 and 20 along with department information for departments 30 and 40. 
+
+ans-- select employee.empname,department.deptid,department.depname
+from employee
+right join department on employee.empid=department.empid
+ where (department.deptid BETWEEN 10001 AND 10003)
+ or
+ (department.deptid BETWEEN 10004 AND 10005);
+ 
+ 
+/(10)Display rank the salaries in table employee while allowing for ties The output will be as such:
+Rank  Salary 
+1  8000 
+2  9000 
+3  12000 
+3  12000 
+ 
+ ans--select rank,empsalary from employee
+order by empsalary asc;
+
+
+/(11)Display name of first employee, third employee, and so forth.
+ans-- select empname from employee
+where MOD(empno, 2)<>0;
+
+
+/(12)Display names and salaries of the employees with the top five salaries.
+ans--SELECT empname,empsalary
+FROM employee
+ORDER BY empsalary DESC
+LIMIT 5
+
+
+/(13)Display name of products which are not purchased by any customer from last 4 months.
+
+ans-- SELECT product.productname
+from customer
+LEFT join product on customer.customerid=product.customerid
+LEFT join ordermaster on customer.customerid=ordermaster.customerid
+where ordermaster.orderdate >= last_day(now()) + interval 1 day - interval 4 month
+GROUP by product.productname;
+
+
+/(14)Display name of products which are purchased in all 12 months.
+
+ans--SELECT customer.customername,product.productname,ordermaster.orderdate
+from customer
+LEFT join product on customer.customerid=product.customerid
+LEFT join ordermaster on customer.customerid=ordermaster.customerid
+WHERE orderdate <= NOW() and orderdate >= Date_add(Now(),interval - 12 month)
+
+/(15)Display the name of customers who are never attended by employee “Peter”//aayush.
+ans--
+select customer.customername,employee.empname from customer
+left join employee on customer.customerid=employee.customerid
+where employee.empname not in ("aayush");
+
+
+//(16)Display the name of customer who has purchased “Pepsi” but not “Lime Water”
+ans-- select customer.customername from customer
+right join product on customer.customerid=product.customerid
+where product.productname="laptop" AND NOT product.productname="mobile";
+
+
+/(17)Display the name of customer who is attended by “Peter” & “Bob”.
+ans--- select customer.customername,employee.empname from customer
+left join employee on customer.customerid=employee.customerid
+where employee.empname  in ("aayush","aaryan");
+
+
+/(18)Display the total billing done by employee “Peter”//aayush.
+ans-- SELECT employee.empname,SUM(product.productrate)
+FROM employee
+LEFT JOIN product on employee.empid=product.empid
+where employee.empname="aayush";
+
+
+/(19)Display name of employees who has attended customer “Thompson”.
+ans--select employee.empname
+from employee
+left join customer on employee.customerid=customer.customerid
+where customer.customername in ("krupa");
+
+/(20)Display the order ids of the order which are placed by “Thompson” but not attended by “Kevin”. 
+ans-- select ordermaster.orderid from customer
+left join ordermaster on customer.customerid=ordermaster.customerid
+left join employee on customer.customerid=employee.customerid
+where customer.customername="vikisha" AND NOT employee.empname="heta";
+
+
+
+/(21)Display name of customers giving maximum number of orders.
+ans-- SELECT customer.customername,COUNT(ordermaster.orderid) as numberoforders
+FROM customer
+left join ordermaster on customer.customerid=ordermaster.customerid
+GROUP BY customer.customerid
+ORDER BY MAX(ordermaster.orderid) 
+desc LIMIT 1;
+
+/(22)Display name of customers who purchased maximum number of products
+
+ans-- SELECT customer.customername,SUM(order_detail.quantity) as numberofproduct
+FROM customer
+right join order_detail on customer.customerid=order_detail.customerid
+GROUP BY order_detail.customerid
+ORDER BY MAX(order_detail.quantity) desc LIMIT 1;
+
+
+/(23)Display name of customers who purchased maximum number of different products 
+ans-- 
+SELECT customer.customername
+FROM customer
+RIGHT join product on customer.customerid=product.customerid
+GROUP BY product.customerid
+ORDER BY COUNT(product.productid) desc limit 1;
+
+//(24)Display name of customers who are not purchased any product from last three months.
+ans-- SELECT product.productname
+from customer
+LEFT join product on customer.customerid=product.customerid
+LEFT join ordermaster on customer.customerid=ordermaster.customerid
+where  ordermaster.orderdate >= last_day(now()) + interval 1 day - interval 3 month
+GROUP by product.productname;
+
+
+//(25)Display name of customers who purchased every month.
+
+ans-- SELECT customer.customername
+from customer
+LEFT join product on customer.customerid=product.customerid
+LEFT join ordermaster on customer.customerid=ordermaster.customerid
+ WHERE MONTH(ordermaster.orderdate) = MONTH(CURDATE());
